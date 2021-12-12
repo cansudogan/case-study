@@ -7,4 +7,5 @@ import org.springframework.data.mongodb.repository.MongoRepository;
 
 public interface IBookRepository extends MongoRepository<Book, String> {
     Page<Book> findAll(Pageable pageable);
+    Book findBookById(String id);
 }

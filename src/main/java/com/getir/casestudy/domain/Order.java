@@ -43,7 +43,7 @@ public class Order {
     @DBRef
     private List<Book> book;
 
-    private Long totalBookCount;
+    private Integer totalBookCount;
 
     public OrderDTO orderDTO(Order order) {
         OrderDTO dto = new OrderDTO();
@@ -66,7 +66,7 @@ public class Order {
         orderResponseDTO.setDateCreated(order.getDateCreated());
         orderResponseDTO.setTotalPrice(order.getTotalPrice());
 
-        List<BookResponseDTO> bookResponseDTOs = new ArrayList<BookResponseDTO>();
+        List<BookResponseDTO> bookResponseDTOs = new ArrayList<>();
         order.getBook().forEach(book -> bookResponseDTOs.add(book.responseDTO(book)));
 
         orderResponseDTO.setBookList(bookResponseDTOs);

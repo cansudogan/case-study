@@ -3,6 +3,8 @@ package com.getir.casestudy.service;
 import com.getir.casestudy.domain.Book;
 import com.getir.casestudy.domain.Order;
 import com.getir.casestudy.domain.User;
+import com.getir.casestudy.exception.OrderNotFoundException;
+import com.getir.casestudy.exception.StockException;
 import com.getir.casestudy.model.dto.BookDetailDTO;
 import com.getir.casestudy.model.dto.OrderDTO;
 import com.getir.casestudy.model.dto.OrderResponseDTO;
@@ -49,16 +51,17 @@ public class OrderService {
 
         for (BookDetailDTO dto : request.getBookOrders()) {
             if (dto.getBookCount() < 1) {
-                throw new RuntimeException();
+                throw new OrderNotFoundException();
             }
         }
 
-        Order order = new Order();
-        order.setUserId(userId);
-        order.setBook(books);
-        order.setDateCreated(new Date());
-        order.setTotalBookCount(calculateTotalBookCount(request));
-        order.setTotalPrice(calculateTotalPrice(request, books));
+        Order order = Order.builder()
+                .userId(userId)
+                .book(books)
+                .dateCreated(new Date())
+                .totalBookCount(calculateTotalBookCount(request))
+                .totalPrice(calculateTotalPrice(request, books))
+                .build();
 
         updateBookStock(request, books);
 
@@ -98,16 +101,16 @@ public class OrderService {
                     log.debug("OrderService - updateBookStock - bookStockInformation updated");
                 } else {
                     log.error("Book not found");
-                    throw new EntityExistsException("Book not found");
+                    throw new StockException();
                 }
             }
 
         }
     }
 
-    private Long calculateTotalBookCount(OrderCreateRequest request) {
+    private Integer calculateTotalBookCount(OrderCreateRequest request) {
         log.debug("OrderService - calculateTotalBookCount started");
-        Long totalBookCount = 0L;
+        Integer totalBookCount = 0;
         for (BookDetailDTO dto : request.getBookOrders()) {
             totalBookCount += dto.getBookCount();
         }
@@ -136,13 +139,8 @@ public class OrderService {
 
     public OrderListResponse getOrderByDateInterval(String userId, OrderByDateRequest request) {
         List<Order> orderList = orderRepository.getAllByUserIdAndDateCreatedBetween(userId, request.getStartDate(), request.getEndDate());
-        List<OrderDTO> orderDTOs = new ArrayList<>();
-
-        orderList.forEach(order -> orderDTOs.add(order.orderDTO(order)));
-        log.debug("Get orders successfully for dates between [{}-{}]", request.getStartDate(), request.getEndDate());
-
         OrderListResponse response = new OrderListResponse();
-        response.setOrders(orderDTOs);
+        response.setOrders(orderList);
 
         return response;
     }
@@ -154,14 +152,10 @@ public class OrderService {
         List<Order> orderList = orderRepository.findAllByUserId(userId, pageable);
 
         if (orderList.isEmpty()) {
-            customerPageResponse.setOrderDTO(new PageImpl<>(Collections.emptyList()));
+            customerPageResponse.setOrder(new PageImpl<>(Collections.emptyList()));
             return customerPageResponse;
         }
-
-        List<OrderDTO> dtoList = new ArrayList<>();
-
-        orderList.forEach(order -> dtoList.add(order.orderDTO(order)));
-        customerPageResponse.setOrderDTO(new PageImpl<>(dtoList, PageRequest.of(request.getPage(), request.getSize()), orderRepository.count()));
+        customerPageResponse.setOrder(new PageImpl<>(orderList, PageRequest.of(request.getPage(), request.getSize()), orderRepository.count()));
         log.debug("CustomerService - getCustomerOrders is finished {}", customerPageResponse);
         return customerPageResponse;
 

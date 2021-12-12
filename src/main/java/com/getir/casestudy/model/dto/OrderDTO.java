@@ -13,5 +13,5 @@ public class OrderDTO {
     private BigDecimal totalPrice;
     private Date dateCreated;
     private List<BookDTO> bookList;
-    private Long totalBookCount;
+    private Integer totalBookCount;
 }

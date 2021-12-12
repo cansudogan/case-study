@@ -50,7 +50,7 @@ public class BookController {
     @DeleteMapping(value = "/{id}")
     @PreAuthorize("hasRole('ADMIN')")
     @ApiOperation(value = "Delete Book", notes = "Delete Book", authorizations = {@Authorization(value = "jwtToken")})
-    public BookResponse deleteBook(@PathVariable String id) {
+    public String deleteBook(@PathVariable String id) {
         return bookService.deleteBook(id);
     }
 }
