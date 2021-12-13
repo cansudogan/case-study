@@ -35,12 +35,17 @@ It consists of four services:
 **Username** : customer **Password** : 123456
 
 
+**Note:** 
+"create book", "update book" and "delete book" operations can be done with only the **ADMIN** role.
+"create order" and "get order all user order" operations can be done with only the **CUSTOMER** role.
+
 ## Swagger
 http://localhost:8080/swagger-ui.html#/
 
-![readingisgood-stockapi](https://user-images.githubusercontent.com/21179912/127793363-7ac807e3-c46e-406b-b197-c87792fc61fc.png)
+<img width="995" alt="Screen Shot 2021-12-13 at 03 32 57" src="https://user-images.githubusercontent.com/21179912/145736229-c8666248-2cf9-4d7d-8232-cf7ea3a9df78.png">
 
-![readingisgood-orderapi](https://user-images.githubusercontent.com/21179912/127793222-0408e57e-1d67-4076-9e67-7ffc8221f1db.png)
+<img width="1004" alt="Screen Shot 2021-12-13 at 03 34 03" src="https://user-images.githubusercontent.com/21179912/145736249-d9421233-9d68-4dec-9b94-0318733614d5.png">
+
 **Note:** After signup and signin operations, press the "Authorize" button located above the right. Fill the "value" with "Bearer generateJWTToken" for authorize user with given role.
 
 ## Postman
