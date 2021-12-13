@@ -40,7 +40,6 @@ public class InitialDataConfiguration {
         }
         if (!userRepository.existsByUsername("admin")) {
             User adminUser = User.builder().username("admin").email("admin@getir.com").password(passwordEncoder.encode("123456")).build();
-            //User adminUser = new User("admin","admin@getir.com",passwordEncoder.encode("123456"));
             Set<Role> roles = new HashSet<>();
             Role userRole = roleRepository.findByRole(ERole.ROLE_ADMIN).orElseThrow(() -> new RuntimeException("Error: Role is not found."));
             roles.add(userRole);
@@ -50,7 +49,6 @@ public class InitialDataConfiguration {
 
         if (!userRepository.existsByUsername("customer")) {
             User customerUser = User.builder().username("customer").email("customer@getir.com").password(passwordEncoder.encode("123456")).build();
-            //User customerUser = new User("customer","customer@getir.com", passwordEncoder.encode("123456"));
             Set<Role> customerRoles = new HashSet<>();
             Role customerRole = roleRepository.findByRole(ERole.ROLE_CUSTOMER).orElseThrow(() -> new RuntimeException("Error: Role is not found."));
             customerRoles.add(customerRole);
