@@ -42,7 +42,7 @@ public class BookService {
 
     public BookResponse getBook(String id) {
         log.debug("BookService - getBook started");
-        Book book = bookRepository.findById(id).orElseThrow(() -> new EntityNotFoundException(id));
+        Book book = bookRepository.findById(id).orElseThrow(() -> new BookNotFoundException());
         BookResponse response = new BookResponse();
         response.setBook(book);
 
